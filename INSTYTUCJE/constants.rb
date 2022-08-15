@@ -1,1 +1,0 @@
-PROJECT_DIRECTORY = Dir.pwd
