@@ -3,16 +3,7 @@
 puts 'Initializing...'
 require_relative 'initialize'
 
-sources = [
-  'data/instytucje.csv'
-]
-
-output_directory = 'output'
-
 puts 'Creating generator'
-generator = Reports::ReportGenerator.new(
-  input: sources[0],
-  output_directory: output_directory
-)
+generator = Reports::ReportGenerator.new(SOURCES)
 puts 'Running report generator'
-generator.generate_report
+generator.generate_reports
