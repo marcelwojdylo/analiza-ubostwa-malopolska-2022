@@ -1,0 +1,4 @@
+spotkanie 17_08_2022
+
+zagregowac dane z populacji do takiej formy jak instytucje
+przepisac pytania na obiekt

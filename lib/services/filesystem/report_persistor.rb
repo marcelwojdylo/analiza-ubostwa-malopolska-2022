@@ -3,22 +3,29 @@
 require 'fileutils'
 
 module Filesystem
-  module ReportPersistor
+  class ReportPersistor
     class UnknownReportType < StandardError; end
 
-    def save_subreport(type:, content: '')
-      raise UnknownSubreportType unless Reports::ReportGenerator::SUBREPORTS.include?(type)
+    def initialize(report)
+      @report = report
+    end
 
+    def save_subreport(type:, content: '')
+      raise UnknownSubreportType unless InstitutionsReport.subreports.include?(type)
+      
       subreport_title = type.to_s.tr('_', ' ').capitalize
-      File.open("#{@report_subdirectory}/#{type}.txt", 'w+') do |file|
-        file.write(subreport_title)
+      puts "Persisting subreport: #{subreport_title}"
+      path = "#{@report.report_subdirectory}/#{type}.txt"
+      puts "Writing to #{path}"
+      File.open(path, 'w+') do |file|
+        file.puts(subreport_title)
         puts subreport_title
-        file.write(content)
+        file.puts(content)
         puts content
       end
 
-      puts "Persisted #{subreport_title}"
-      puts "Wrote to file #{@report_subdirectory}/#{type}"
+      puts "Subreport persisted successfully"
+      puts "Wrote to #{path}"
     end
   end
 end
