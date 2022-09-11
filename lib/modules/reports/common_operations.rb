@@ -7,6 +7,7 @@ module Reports
     end
 
     def clean_up_checkbox_answers(rows)
+      rows = rows.map { |a| a.gsub("Nie, poziom", "nie — poziom") }
       rows = rows.map { |a| a.gsub("(alkohol, narkotyki)", "(alkohol lub narkotyki)")}
       rows = rows.map { |a| a.gsub("czynsz, media, podatki", "czynsz media podatki")}
       rows = rows.map { |a| a.gsub("wakacyjne, feryjne", "wakacyjne feryjne")}
@@ -15,6 +16,7 @@ module Reports
       rows = rows.map { |a| a.gsub(", któr", " któr")}
       rows = rows.map { |a| a.gsub(", gdzie", " gdzie")}
       rows = rows.map { |a| a.gsub("zdrowie, w sz", "zdrowie a w sz")}
+      
       rows = rows.map { |a| a.gsub(",,", ",")}
       rows.reject { |a| a == 'brak' }
     end
@@ -47,7 +49,7 @@ module Reports
       rows.each do |answer|
         unique_answers << answer.downcase.split(', ')
       end
-      unique_answers.flatten
+=      unique_answers.flatten.uniq
     end
   end
 end

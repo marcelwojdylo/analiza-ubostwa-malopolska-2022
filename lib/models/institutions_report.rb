@@ -18,6 +18,7 @@ class InstitutionsReport < Report
     percepcja_powszechności_ubóstwa_w_krakowie_u_instytucji
     szczególnie_ubogie_dzielnice_krakowa
     dzielnice_krakowa_o_wyższym_poziomie_ubóstwa
+    grupy_społeczne_o_wyższym_poziomie_ubóstwa
   ].freeze
 
   def self.subreport_types
@@ -79,6 +80,15 @@ class InstitutionsReport < Report
       type: :percepcja_powszechności_ubóstwa_w_krakowie_u_instytucji,
       content: count_unique_answers(@data.by_col[18]),
       question: @data.headers[18]
+    )
+  end
+
+  def generate_grupy_społeczne_o_wyższym_poziomie_ubóstwa
+    unique_answers = unique_answers_from_checkbox_rows(@data.by_col[21])
+    add_subreport(
+      type: :grupy_społeczne_o_wyższym_poziomie_ubóstwa,
+      content: count_unique_answers(unique_answers),
+      question: @data.headers[21]
     )
   end
 

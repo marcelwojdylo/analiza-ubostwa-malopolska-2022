@@ -29,7 +29,7 @@ module Filesystem
           file.persist_and_log(subreport.title)
           file.puts(subreport.title.gsub(/./, "~"))
           if subreport.question.present?
-            file.persist_and_log(subreport.question)
+            file.puts(subreport.question)
             file.puts(subreport.title.gsub(/./, "~"))
           end
           file.puts("\n")
