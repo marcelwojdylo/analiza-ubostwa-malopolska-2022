@@ -2,7 +2,7 @@
 
 require 'rspec'
 require 'pry'
-Dir[File.join('.', 'lib/**/*.rb')].sort.each do |f|
+Dir[File.join('.', 'lib/**/**/**/*.rb')].sort.each do |f|
   require f
 end
 require 'csv'

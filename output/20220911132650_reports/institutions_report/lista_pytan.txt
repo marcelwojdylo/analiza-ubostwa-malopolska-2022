@@ -1,5 +1,6 @@
-List of questions
-~~~~~~~~~~~~~~~~~
+Lista pytan
+~~~~~~~~~~~
+
 1. Sygnatura czasowa
 2. Adres e-mail
 3. Nazwa instytucji/organizacji

@@ -28,6 +28,7 @@ module Filesystem
         File.open(PROJECT_DIRECTORY + subreport.path, 'w+') do |file|
           file.persist_and_log(subreport.title)
           file.puts(subreport.title.gsub(/./, "~"))
+          file.puts("\n")
           subreport.content.each do |element|
             file.puts(prettify(element))
           end

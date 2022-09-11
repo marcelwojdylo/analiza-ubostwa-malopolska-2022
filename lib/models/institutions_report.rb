@@ -4,8 +4,9 @@ require_relative 'report'
 
 class InstitutionsReport < Report
   SUBREPORT_TYPES = %i[
-    list_of_questions
-    institution_profiles
+    lista_pytan
+    badane_instytucje
+    rodzaje_instytucji
   ].freeze
 
   def self.subreport_types
@@ -23,17 +24,25 @@ class InstitutionsReport < Report
 
   private
 
-  def generate_list_of_questions
+  def generate_rodzaje_instytucji
+    content = count_unique_answers(@data.by_col[11])
+    add_subreport(
+      type: :rodzaje_instytucji,
+      content: content
+    )
+  end
+
+  def generate_lista_pytan
     content = @data.headers.map.with_index do |header, index|
       "#{index + 1}. #{header}\n"
     end
     add_subreport(
-      type: :list_of_questions,
+      type: :lista_pytan,
       content: content
     )
   end
   
-  def generate_institution_profiles
+  def generate_badane_instytucje
     questions = @data.headers[1..11]
     institutions = []
     @data.by_row.each do |row|
@@ -44,7 +53,7 @@ class InstitutionsReport < Report
       institutions << institution
     end
     add_subreport(
-      type: :institution_profiles,
+      type: :badane_instytucje,
       content: institutions
     )
   end

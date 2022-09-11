@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
 require './lib/services/filesystem/report_persistor'
+require './lib/modules/reports/common_operations'
 
 class Report
+  include Reports::CommonOperations
+
   class SubreportsConstantMissing < StandardError; end
+
   attr_reader :report_subdirectory
 
   def initialize(input_file_path, generator)
