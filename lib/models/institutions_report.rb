@@ -7,6 +7,10 @@ class InstitutionsReport < Report
     lista_pytan
     badane_instytucje
     rodzaje_instytucji
+    glowne_obszary_dzialania_instytucji
+    adresy_email_ankietowanych
+    definicja_ubostwa
+    stosowane_kryteria_dochodowe
   ].freeze
 
   def self.subreport_types
@@ -23,6 +27,45 @@ class InstitutionsReport < Report
   end
 
   private
+
+  def generate_stosowane_kryteria_dochodowe
+    unique_answers = @data.by_col[13].map do |answer| 
+      if (answer.downcase.include? "nie") || 
+         (answer.downcase.include? "brak") || 
+         (answer.include? "-") ||
+         (answer.include? "jak wyżej")
+        "nie stosujemy"
+      else
+        answer 
+      end
+    end
+    add_subreport(
+      type: :stosowane_kryteria_dochodowe,
+      content: count_unique_answers(unique_answers)
+    )
+  end
+
+  def generate_definicja_ubostwa
+    add_subreport(
+      type: :definicja_ubostwa,
+      content: count_unique_answers(@data.by_col[12])
+    )
+  end
+
+  def generate_adresy_email_ankietowanych
+    add_subreport(
+      type: :adresy_email_ankietowanych,
+      content: @data.by_col[1].map { |email| "#{email}," }
+    )
+  end
+
+  def generate_glowne_obszary_dzialania_instytucji
+    content = count_unique_answers(@data.by_col[9])
+    add_subreport(
+      type: :glowne_obszary_dzialania_instytucji,
+      content: content
+    )
+  end
 
   def generate_rodzaje_instytucji
     content = count_unique_answers(@data.by_col[11])
