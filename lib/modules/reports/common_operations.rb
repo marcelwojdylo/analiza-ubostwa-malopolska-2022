@@ -19,6 +19,28 @@ module Reports
       rows.reject { |a| a == 'brak' }
     end
 
+    def clean_up_dunnos(rows)
+      rows.map do |row|
+        row = row.downcase.strip
+        dunnos = [
+          "nie mam wiedzy", 
+          "brak informacji", 
+          "nie wiemy",
+          "nie wiem",
+          "jak wyżej",
+          "brak wiedzy w tym obszarze",
+          "nie dotyczy",
+          "nie dotyczy.",
+          "nie znamy odpowiedzi"
+        ]
+        if dunnos.include? row
+          "trudno powiedzieć"
+        else
+          row
+        end
+      end
+    end
+
     def unique_answers_from_checkbox_rows(rows)
       rows = clean_up_checkbox_answers(rows)
       unique_answers = []

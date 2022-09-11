@@ -17,6 +17,7 @@ class InstitutionsReport < Report
     rodzaje_wsparcia_oferowane_przez_instytucje
     percepcja_powszechności_ubóstwa_w_krakowie_u_instytucji
     szczególnie_ubogie_dzielnice_krakowa
+    dzielnice_krakowa_o_wyższym_poziomie_ubóstwa
   ].freeze
 
   def self.subreport_types
@@ -48,6 +49,20 @@ class InstitutionsReport < Report
     add_subreport(
       type: :stosowane_kryteria_dochodowe,
       content: count_unique_answers(unique_answers)
+    )
+  end
+
+  def generate_dzielnice_krakowa_o_wyższym_poziomie_ubóstwa
+    answers = clean_up_dunnos(@data.by_col[20])
+    answers = answers.map do |a| a.include?('nową') ? a.gsub('nową', 'nowa') : a end
+    answers = answers.map do |a| a.include?('stare podgórze') ? 'podgórze' : a end
+    unique_answers = answers.uniq.map do |answer|
+      answer.split(', ')
+    end.flatten
+    add_subreport(
+      type: :dzielnice_krakowa_o_wyższym_poziomie_ubóstwa,
+      content: count_unique_answers(unique_answers),
+      question: @data.headers[20]
     )
   end
 
