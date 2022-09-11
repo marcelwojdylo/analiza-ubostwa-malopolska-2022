@@ -7,7 +7,7 @@ module Filesystem
     def setup_output_directories
       log 'Setting up output directories'
       @timestamp = Time.now.utc.strftime('%Y%m%d%H%M%S')
-      @output_directory = "#{PROJECT_DIRECTORY}/output"
+      @output_directory = "/output"
       @run_subdirectory = "#{@output_directory}/#{@timestamp}_reports"
       setup_output_directory
       setup_run_subdirectory
@@ -37,7 +37,7 @@ module Filesystem
       return if File.directory?(directory)
 
       log "taking #{directory}"
-      FileUtils.mkdir_p(directory)
+      FileUtils.mkdir_p(PROJECT_DIRECTORY + directory)
     end
   end
 end

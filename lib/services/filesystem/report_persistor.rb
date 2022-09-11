@@ -25,28 +25,31 @@ module Filesystem
       private
       
       def persist_file(subreport)
-        File.open(subreport.path, 'w+') do |file|
+        File.open(PROJECT_DIRECTORY + subreport.path, 'w+') do |file|
           file.persist_and_log(subreport.title)
-          file.persist_and_log(subreport.title.gsub(/./, "~"))
+          file.puts(subreport.title.gsub(/./, "~"))
           subreport.content.each do |element|
-            file.persist_and_log(prettify(element))
+            file.puts(prettify(element))
           end
         end
       end
-  
+      
       def prettify(content_unit)
-        case content_unit.class.name
-        when Array
-          content_unit
-        when Hash
-          content_unit
-        when String
+        prettified = content_unit
+        if content_unit.is_a? Array
+          prettified = content_unit.map do |el|
+            "#{el}\n"
+          end
+        elsif content_unit.is_a? Hash
+          prettified = content_unit.map do |key, value|
+            "#{key}:\n    #{value}\n"
+          end
+          prettified << "~~~~~~~~~~~~"
+          prettified << "\n"
+        elsif content_unit.is_a? String
           return if content_unit.length < 2
-
-          content_unit
-        else
-          raise InvalidContentFormat
         end
+        return prettified
       end
     end
   end
