@@ -13,30 +13,41 @@ File.class_eval { include FileCustomMethods }
 
 module Filesystem
   class ReportPersistor
-    class UnknownReportType < StandardError; end
-
-    def initialize(report)
-      @report = report
-    end
-
-    def save_subreport(type:, content: '')
-      raise UnknownSubreportType unless InstitutionsReport.subreports.include?(type)
-
-      subreport_title = type.to_s.tr('_', ' ').capitalize
-      log "Persisting subreport: #{subreport_title}"
-      path = "#{@report.report_subdirectory}/#{type}.txt"
-      log "Writing to #{path}"
-      File.open(path, 'w+') do |file|
-        file.persist_and_log(subreport_title)
-        file.persist_and_log(subreport_title.gsub(/./, "~"))
-        file.persist_and_log(content)
+    class << self
+      def save_subreport(subreport)
+        log "Persisting subreport: #{subreport.title}"
+        log "Writing to #{subreport.path}"
+        persist_file(subreport)
+        
+        log 'Subreport persisted successfully'
       end
+      
+      private
+      
+      def persist_file(subreport)
+        File.open(subreport.path, 'w+') do |file|
+          file.persist_and_log(subreport.title)
+          file.persist_and_log(subreport.title.gsub(/./, "~"))
+          subreport.content.each do |element|
+            file.persist_and_log(prettify(element))
+          end
+        end
+      end
+  
+      def prettify(content_unit)
+        case content_unit.class.name
+        when Array
+          content_unit
+        when Hash
+          content_unit
+        when String
+          return if content_unit.length < 2
 
-      log 'Subreport persisted successfully'
-      log "Wrote to #{path}"
+          content_unit
+        else
+          raise InvalidContentFormat
+        end
+      end
     end
-
-    private 
-
   end
 end

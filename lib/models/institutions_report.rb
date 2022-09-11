@@ -3,21 +3,22 @@
 require_relative 'report'
 
 class InstitutionsReport < Report
-  SUBREPORTS = %i[
+  SUBREPORT_TYPES = %i[
     list_of_questions
     institution_profiles
   ].freeze
 
-  def self.subreports
-    SUBREPORTS
+  def self.subreport_types
+    SUBREPORT_TYPES
   end
 
   def generate_report
-    SUBREPORTS.each do |subreport|
-      log("Generating #{subreport} subreport")
-      send("generate_#{subreport}")
-    rescue NoMethodError
+    SUBREPORT_TYPES.each do |subreport_type|
+      log("Generating #{subreport_type} subreport")
+      method_name = "generate_#{subreport_type}"
+      send(method_name)
     end
+    persist_subreports
   end
 
   private
@@ -26,12 +27,12 @@ class InstitutionsReport < Report
     content = @data.headers.map.with_index do |header, index|
       "#{index + 1}. #{header}\n"
     end
-    @persistor.save_subreport(
+    add_subreport(
       type: :list_of_questions,
       content: content
     )
   end
-
+  
   def generate_institution_profiles
     questions = @data.headers[1..11]
     institutions = []
@@ -42,7 +43,7 @@ class InstitutionsReport < Report
       end
       institutions << institution
     end
-    @persistor.save_subreport(
+    add_subreport(
       type: :institution_profiles,
       content: institutions
     )
