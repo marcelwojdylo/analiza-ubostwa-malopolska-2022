@@ -4,17 +4,18 @@ require_relative 'report'
 
 class InstitutionsReport < Report
   SUBREPORT_TYPES = %i[
-    lista_pytan
+    lista_pytań
     badane_instytucje
     rodzaje_instytucji
-    glowne_obszary_dzialania_instytucji
+    głowne_obszary_działania_instytucji
     adresy_email_ankietowanych
-    definicja_ubostwa
+    definicja_ubóstwa
     stosowane_kryteria_dochodowe
-    proporcja_ubogich_wsrod_odbiorcow_instytucji
-    dominujace_przyczyny_ubostwa
+    proporcja_ubogich_wśród_odbiorcow_instytucji
+    dominujace_przyczyny_ubóstwa
     dominujące_potrzeby_wynikające_z_ubóstwa
     rodzaje_wsparcia_oferowane_przez_instytucje
+    percepcja_powszechności_ubóstwa_w_krakowie_u_instytucji
   ].freeze
 
   def self.subreport_types
@@ -49,6 +50,14 @@ class InstitutionsReport < Report
     )
   end
 
+  def generate_percepcja_powszechności_ubóstwa_w_krakowie_u_instytucji
+    add_subreport(
+      type: :percepcja_powszechności_ubóstwa_w_krakowie_u_instytucji,
+      content: count_unique_answers(@data.by_col[18]),
+      question: @data.headers[18]
+    )
+  end
+
   def generate_rodzaje_wsparcia_oferowane_przez_instytucje
     unique_answers = unique_answers_from_checkbox_rows(@data.by_col[17])
     add_subreport(
@@ -67,26 +76,26 @@ class InstitutionsReport < Report
     )
   end
 
-  def generate_proporcja_ubogich_wsrod_odbiorcow_instytucji
+  def generate_proporcja_ubogich_wśród_odbiorcow_instytucji
     add_subreport(
-      type: :proporcja_ubogich_wsrod_odbiorcow_instytucji,
+      type: :proporcja_ubogich_wśród_odbiorcow_instytucji,
       content: count_unique_answers(@data.by_col[14]),
       question: @data.headers[14]
     )
   end
 
-  def generate_dominujace_przyczyny_ubostwa
+  def generate_dominujace_przyczyny_ubóstwa
     unique_answers = unique_answers_from_checkbox_rows(@data.by_col[15])
     add_subreport(
-      type: :dominujace_przyczyny_ubostwa,
+      type: :dominujace_przyczyny_ubóstwa,
       content: count_unique_answers(unique_answers),
       question: @data.headers[15]
     )
   end
 
-  def generate_definicja_ubostwa
+  def generate_definicja_ubóstwa
     add_subreport(
-      type: :definicja_ubostwa,
+      type: :definicja_ubóstwa,
       content: count_unique_answers(@data.by_col[12]),
       question: @data.headers[12]
     )
@@ -117,17 +126,16 @@ class InstitutionsReport < Report
     )
   end
 
-  def generate_lista_pytan
+  def generate_lista_pytań
     content = @data.headers.map.with_index do |header, index|
       "#{index + 1}. #{header}\n"
     end
-    add_subreport(
-      type: :lista_pytan,
+ł   add_subreport(ł      type: :lista_pytań,
       content: content
     )
   end
-  
-  def generate_badane_instytucje
+ł 
+  def generate_ładane_instytucje
     questions = @data.headers[1..11]
     institutions = []
     @data.by_row.each do |row|
