@@ -21,6 +21,9 @@ class InstitutionsReport < Report
     grupy_społeczne_o_wyższym_poziomie_ubóstwa
     znajomość_osób_ubogich_nie_korzystających_z_pomocy
     powody_nie_korzystania_z_pomocy
+    zabiegi_mogące_pomóc_osobom_ubogim
+    lokowanie_odpowiedzialności_za_poprawę_sytuacji_osób_ubogich
+    wymieniane_organizacje_pomagające_osobom_ubogim
   ].freeze
 
   def self.subreport_types
@@ -69,10 +72,34 @@ class InstitutionsReport < Report
     )
   end
 
+  def generate_lokowanie_odpowiedzialności_za_poprawę_sytuacji_osób_ubogich
+    add_subreport(
+      type: :lokowanie_odpowiedzialności_za_poprawę_sytuacji_osób_ubogich,
+      content: count_unique_answers(@data.by_col[25]),
+      question: @data.headers[25]
+    )
+  end
+
+  def generate_zabiegi_mogące_pomóc_osobom_ubogim
+    add_subreport(
+      type: :zabiegi_mogące_pomóc_osobom_ubogim,
+      content: list_unique_answers(@data.by_col[24]),
+      question: @data.headers[24]
+    )
+  end
+
+  def generate_wymieniane_organizacje_pomagające_osobom_ubogim
+    add_subreport(
+      type: :wymieniane_organizacje_pomagające_osobom_ubogim,
+      content: list_unique_answers(@data.by_col[26]),
+      question: @data.headers[26]
+    )
+  end
+
   def generate_powody_nie_korzystania_z_pomocy
     add_subreport(
       type: :powody_nie_korzystania_z_pomocy,
-      content: count_unique_answers(@data.by_col[23].map(&:downcase)),
+      content: count_unique_answers(@data.by_col[23]),
       question: @data.headers[23]
     )
   end

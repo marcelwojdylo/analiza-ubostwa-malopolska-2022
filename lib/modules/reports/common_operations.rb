@@ -1,7 +1,11 @@
 module Reports
   module CommonOperations
+    def list_unique_answers(answers)
+      answers.compact.map(&:downcase).map(&:strip).uniq
+    end
+
     def count_unique_answers(answers)
-      content = answers.map(&:strip).group_by{|e| e}.map{|k, v| [k, "#{(v.length.to_f/answers.length)*100}% (#{v.length})"]}.to_h
+      content = answers.map(&:downcase).map(&:strip).group_by{|e| e}.map{|k, v| [k, "#{(v.length.to_f/answers.length)*100}% (#{v.length})"]}.to_h
       content["Liczba wszystkich odpowiedzi: "] = answers.count
       return content
     end
