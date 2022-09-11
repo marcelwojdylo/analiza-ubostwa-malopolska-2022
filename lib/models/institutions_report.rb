@@ -20,6 +20,7 @@ class InstitutionsReport < Report
     dzielnice_krakowa_o_wyższym_poziomie_ubóstwa
     grupy_społeczne_o_wyższym_poziomie_ubóstwa
     znajomość_osób_ubogich_nie_korzystających_z_pomocy
+    powody_nie_korzystania_z_pomocy
   ].freeze
 
   def self.subreport_types
@@ -65,6 +66,14 @@ class InstitutionsReport < Report
       type: :dzielnice_krakowa_o_wyższym_poziomie_ubóstwa,
       content: count_unique_answers(unique_answers),
       question: @data.headers[20]
+    )
+  end
+
+  def generate_powody_nie_korzystania_z_pomocy
+    add_subreport(
+      type: :powody_nie_korzystania_z_pomocy,
+      content: count_unique_answers(@data.by_col[23].map(&:downcase)),
+      question: @data.headers[23]
     )
   end
 
