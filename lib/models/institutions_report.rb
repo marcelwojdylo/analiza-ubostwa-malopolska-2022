@@ -11,6 +11,8 @@ class InstitutionsReport < Report
     adresy_email_ankietowanych
     definicja_ubostwa
     stosowane_kryteria_dochodowe
+    proporcja_ubogich_wsrod_odbiorcow_instytucji
+    dominujace_przyczyny_ubostwa
   ].freeze
 
   def self.subreport_types
@@ -42,6 +44,29 @@ class InstitutionsReport < Report
     add_subreport(
       type: :stosowane_kryteria_dochodowe,
       content: count_unique_answers(unique_answers)
+    )
+  end
+
+  def generate_proporcja_ubogich_wsrod_odbiorcow_instytucji
+    add_subreport(
+      type: :proporcja_ubogich_wsrod_odbiorcow_instytucji,
+      content: count_unique_answers(@data.by_col[14])
+    )
+  end
+
+  def generate_dominujace_przyczyny_ubostwa
+    rows = @data.by_col[15]
+    rows = rows.map { |a| a.gsub("(alkohol, narkotyki)", "(alkohol lub narkotyki)")}
+    rows = rows.map { |a| a.gsub("rodziny, w których", "rodziny w których")}
+    rows = rows.map { |a| a.gsub(",,", ",")}
+    rows = rows.reject { |a| a == 'brak' }
+    unique_answers = []
+    rows.each do |answer|
+      unique_answers << answer.split(', ')
+    end
+    add_subreport(
+      type: :dominujace_przyczyny_ubostwa,
+      content: count_unique_answers(unique_answers.flatten)
     )
   end
 
