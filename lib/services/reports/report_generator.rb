@@ -25,13 +25,18 @@ module Reports
       @sources.each do |source|
         raise InputFileNotFound unless File.exist?(source)
 
-        Dir[File.join(source, '**/*.csv')].sort.each do |file_path|
-          log "loading #{file_path}"
-          if file_path.include?('instytucje')
-            @reports << InstitutionsReport.new(file_path, self)
-          elsif file_path.include?('populacja')
-            @reports << PopulationReport.new(file_path, self)
-          end
+        csv_paths = Dir[File.join(source, '**/*.csv')].sort
+        load_csv(csv_paths)
+      end
+    end
+
+    def load_csv(csv_paths)
+      csv_paths.each do |file_path|
+        log "loading #{file_path}"
+        if file_path.include?('instytucje')
+          @reports << InstitutionsReport.new(file_path, self)
+        elsif file_path.include?('populacja')
+          @reports << PopulationReport.new(file_path, self)
         end
       end
     end

@@ -20,7 +20,7 @@ directories.each do |directory_path|
       next
     end
 
-    old_name = File.basename(file, '.*')
+    # old_name = File.basename(file, '.*')
     # ciochon:
     # new_name = (old_name[-4..] || old_name).strip.chars.take(3).join
     # maciejewska:

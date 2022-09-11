@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Reports
   module CommonOperations
     def list_unique_answers(answers)
@@ -5,23 +7,23 @@ module Reports
     end
 
     def count_unique_answers(answers)
-      content = answers.map(&:downcase).map(&:strip).group_by{|e| e}.map{|k, v| [k, "#{(v.length.to_f/answers.length)*100}% (#{v.length})"]}.to_h
-      content["Liczba wszystkich odpowiedzi: "] = answers.count
-      return content
+      content = answers.map(&:downcase).map(&:strip).group_by do |e| e end.transform_values { |v| "#{(v.length.to_f / answers.length) * 100}% (#{v.length})" }
+      content['Liczba wszystkich odpowiedzi: '] = answers.count
+      content
     end
 
     def clean_up_checkbox_answers(rows)
-      rows = rows.map { |a| a.gsub("Nie, poziom", "nie — poziom") }
-      rows = rows.map { |a| a.gsub("(alkohol, narkotyki)", "(alkohol lub narkotyki)")}
-      rows = rows.map { |a| a.gsub("czynsz, media, podatki", "czynsz media podatki")}
-      rows = rows.map { |a| a.gsub("wakacyjne, feryjne", "wakacyjne feryjne")}
-      rows = rows.map { |a| a.gsub("środki higieniczne i odzież", "środki higieniczne, odzież")}
-      rows = rows.map { |a| a.gsub(", w któr", " w któr")}
-      rows = rows.map { |a| a.gsub(", któr", " któr")}
-      rows = rows.map { |a| a.gsub(", gdzie", " gdzie")}
-      rows = rows.map { |a| a.gsub("zdrowie, w sz", "zdrowie a w sz")}
-      
-      rows = rows.map { |a| a.gsub(",,", ",")}
+      rows = rows.map { |a| a.gsub('Nie, poziom', 'nie — poziom') }
+      rows = rows.map { |a| a.gsub('(alkohol, narkotyki)', '(alkohol lub narkotyki)') }
+      rows = rows.map { |a| a.gsub('czynsz, media, podatki', 'czynsz media podatki') }
+      rows = rows.map { |a| a.gsub('wakacyjne, feryjne', 'wakacyjne feryjne') }
+      rows = rows.map { |a| a.gsub('środki higieniczne i odzież', 'środki higieniczne, odzież') }
+      rows = rows.map { |a| a.gsub(', w któr', ' w któr') }
+      rows = rows.map { |a| a.gsub(', któr', ' któr') }
+      rows = rows.map { |a| a.gsub(', gdzie', ' gdzie') }
+      rows = rows.map { |a| a.gsub('zdrowie, w sz', 'zdrowie a w sz') }
+
+      rows = rows.map { |a| a.gsub(',,', ',') }
       rows.reject { |a| a == 'brak' }
     end
 
@@ -29,18 +31,18 @@ module Reports
       rows.map do |row|
         row = row.downcase.strip
         dunnos = [
-          "nie mam wiedzy", 
-          "brak informacji", 
-          "nie wiemy",
-          "nie wiem",
-          "jak wyżej",
-          "brak wiedzy w tym obszarze",
-          "nie dotyczy",
-          "nie dotyczy.",
-          "nie znamy odpowiedzi"
+          'nie mam wiedzy',
+          'brak informacji',
+          'nie wiemy',
+          'nie wiem',
+          'jak wyżej',
+          'brak wiedzy w tym obszarze',
+          'nie dotyczy',
+          'nie dotyczy.',
+          'nie znamy odpowiedzi'
         ]
         if dunnos.include? row
-          "trudno powiedzieć"
+          'trudno powiedzieć'
         else
           row
         end

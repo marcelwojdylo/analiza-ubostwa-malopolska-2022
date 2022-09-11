@@ -18,19 +18,19 @@ module Filesystem
         log "Persisting subreport: #{subreport.title}"
         log "Writing to #{subreport.path}"
         persist_file(subreport)
-        
+
         log 'Subreport persisted successfully'
       end
-      
+
       private
-      
+
       def persist_file(subreport)
         File.open(PROJECT_DIRECTORY + subreport.path, 'w+') do |file|
           file.persist_and_log(subreport.title)
-          file.puts(subreport.title.gsub(/./, "~"))
+          file.puts(subreport.title.gsub(/./, '~'))
           if subreport.question.present?
             file.puts(subreport.question)
-            file.puts(subreport.title.gsub(/./, "~"))
+            file.puts(subreport.title.gsub(/./, '~'))
           end
           file.puts("\n")
           subreport.content.each do |element|
@@ -38,23 +38,24 @@ module Filesystem
           end
         end
       end
-      
+
       def prettify(content_unit)
         prettified = content_unit
-        if content_unit.is_a? Array
+        case content_unit
+        when Array
           prettified = content_unit.map do |el|
             "#{el}\n"
           end
-        elsif content_unit.is_a? Hash
+        when Hash
           prettified = content_unit.map do |key, value|
             "#{key}:\n    #{value}\n"
           end
-          prettified << "~~~~~~~~~~~~"
+          prettified << '~~~~~~~~~~~~'
           prettified << "\n"
-        elsif content_unit.is_a? String
+        when String
           return if content_unit.length < 2
         end
-        return prettified
+        prettified
       end
     end
   end

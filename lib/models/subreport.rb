@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Subreport
   class UnknownType < StandardError; end
   class InvalidType < StandardError; end
@@ -8,16 +10,19 @@ class Subreport
 
   def initialize(report:, type:, content:, question: '')
     raise InvalidReport unless report.is_a? Report
+
     @report = report
 
     raise InvalidType unless type.is_a? Symbol
+
     unless type_valid?(type)
       LOGGER.error(type)
-      raise UnknownType 
+      raise UnknownType
     end
     @type = type
 
     raise InvalidContentFormat unless content_valid?(content)
+
     @content = content
 
     @question = question

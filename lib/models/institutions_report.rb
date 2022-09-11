@@ -42,14 +42,14 @@ class InstitutionsReport < Report
   private
 
   def generate_stosowane_kryteria_dochodowe
-    unique_answers = @data.by_col[13].map do |answer| 
-      if (answer.downcase.include? "nie") || 
-         (answer.downcase.include? "brak") || 
-         (answer.include? "-") ||
-         (answer.include? "jak wyżej")
-        "nie stosujemy"
+    unique_answers = @data.by_col[13].map do |answer|
+      if (answer.downcase.include? 'nie') ||
+         (answer.downcase.include? 'brak') ||
+         (answer.include? '-') ||
+         (answer.include? 'jak wyżej')
+        'nie stosujemy'
       else
-        answer 
+        answer
       end
     end
     add_subreport(
@@ -60,8 +60,8 @@ class InstitutionsReport < Report
 
   def generate_dzielnice_krakowa_o_wyższym_poziomie_ubóstwa
     answers = clean_up_dunnos(@data.by_col[20])
-    answers = answers.map do |a| a.include?('nową') ? a.gsub('nową', 'nowa') : a end
-    answers = answers.map do |a| a.include?('stare podgórze') ? 'podgórze' : a end
+    answers = answers.map { |a| a.include?('nową') ? a.gsub('nową', 'nowa') : a }
+    answers = answers.map { |a| a.include?('stare podgórze') ? 'podgórze' : a }
     unique_answers = answers.uniq.map do |answer|
       answer.split(', ')
     end.flatten
@@ -145,7 +145,7 @@ class InstitutionsReport < Report
       question: @data.headers[17]
     )
   end
-  
+
   def generate_dominujące_potrzeby_wynikające_z_ubóstwa
     unique_answers = unique_answers_from_checkbox_rows(@data.by_col[16])
     add_subreport(
@@ -210,8 +210,7 @@ class InstitutionsReport < Report
       "#{index + 1}. #{header}\n"
     end
     add_subreport(type: :lista_pytań,
-      content: content
-    )
+                  content: content)
   end
 
   def generate_badane_instytucje

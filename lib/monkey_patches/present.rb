@@ -2,12 +2,14 @@
 
 class Object
   def present?
-    return true if self == nil
-    if self.is_a? String
+    return true if nil?
+
+    case self
+    when String
       return true unless self == ''
-    elsif self.is_a? Array
+    when Array
       return true unless self == []
-    elsif self.is_a? Hash
+    when Hash
       return true unless self == {}
     end
     false
