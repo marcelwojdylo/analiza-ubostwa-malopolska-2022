@@ -7,5 +7,6 @@ Dir[File.join('.', 'lib/**/*.rb')].sort.each do |f|
 end
 require 'csv'
 
+require_relative 'logger'
 require_relative 'sources'
 require_relative 'constants'

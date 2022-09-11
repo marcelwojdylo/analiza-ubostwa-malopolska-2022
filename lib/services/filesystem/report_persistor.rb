@@ -2,6 +2,15 @@
 
 require 'fileutils'
 
+module FileCustomMethods
+  def persist_and_log(string)
+    log string
+    puts(string)
+  end
+end
+
+File.class_eval { include FileCustomMethods }
+
 module Filesystem
   class ReportPersistor
     class UnknownReportType < StandardError; end
@@ -12,20 +21,22 @@ module Filesystem
 
     def save_subreport(type:, content: '')
       raise UnknownSubreportType unless InstitutionsReport.subreports.include?(type)
-      
+
       subreport_title = type.to_s.tr('_', ' ').capitalize
-      puts "Persisting subreport: #{subreport_title}"
+      log "Persisting subreport: #{subreport_title}"
       path = "#{@report.report_subdirectory}/#{type}.txt"
-      puts "Writing to #{path}"
+      log "Writing to #{path}"
       File.open(path, 'w+') do |file|
-        file.puts(subreport_title)
-        puts subreport_title
-        file.puts(content)
-        puts content
+        file.persist_and_log(subreport_title)
+        file.persist_and_log(subreport_title.gsub(/./, "~"))
+        file.persist_and_log(content)
       end
 
-      puts "Subreport persisted successfully"
-      puts "Wrote to #{path}"
+      log 'Subreport persisted successfully'
+      log "Wrote to #{path}"
     end
+
+    private 
+
   end
 end

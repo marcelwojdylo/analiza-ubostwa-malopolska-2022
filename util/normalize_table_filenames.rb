@@ -7,16 +7,16 @@ directories = [
   '/data/populacja/maciejewska/tabele'
 ]
 
-puts 'Normalizing table filenames in directories:'
-puts directories
+log 'Normalizing table filenames in directories:'
+log directories
 
 directories.each do |directory_path|
   targetted_directory = PROJECT_DIRECTORY + directory_path
-  puts "Getting files from #{targetted_directory}"
-  Dir[targetted_directory + '/*.csv'].each do |file|
-    puts "- processing #{File.basename(file, '.*')}"
+  log "Getting files from #{targetted_directory}"
+  Dir["#{targetted_directory}/*.csv"].each do |file|
+    log "- processing #{File.basename(file, '.*')}"
     unless File.file?(file)
-      puts 'Subdirectory skipped'
+      log 'Subdirectory skipped'
       next
     end
 
@@ -27,6 +27,6 @@ directories.each do |directory_path|
     # new_name = "HM#{old_name[16..17]}"
     new_path = "#{targetted_directory}/#{new_name}.csv"
     File.rename(file, new_path)
-    puts "Renamed #{file} to #{new_name}"
+    log "Renamed #{file} to #{new_name}"
   end
 end

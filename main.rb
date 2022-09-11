@@ -3,7 +3,7 @@
 puts 'Initializing...'
 require_relative 'initialize'
 
-puts 'Creating generator'
+log 'Creating generator'
 generator = Reports::ReportGenerator.new(SOURCES)
-puts 'Running report generator'
+log 'Running report generator'
 generator.generate_reports
