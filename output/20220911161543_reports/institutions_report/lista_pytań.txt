@@ -1,4 +1,4 @@
-Lista pytan
+Lista pytań
 ~~~~~~~~~~~
 
 1. Sygnatura czasowa

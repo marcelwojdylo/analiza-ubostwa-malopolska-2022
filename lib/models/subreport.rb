@@ -11,7 +11,10 @@ class Subreport
     @report = report
 
     raise InvalidType unless type.is_a? Symbol
-    raise UnknownType unless type_valid?(type)
+    unless type_valid?(type)
+      LOGGER.error(type)
+      raise UnknownType 
+    end
     @type = type
 
     raise InvalidContentFormat unless content_valid?(content)

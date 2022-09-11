@@ -7,15 +7,16 @@ class InstitutionsReport < Report
     lista_pytań
     badane_instytucje
     rodzaje_instytucji
-    głowne_obszary_działania_instytucji
+    główne_obszary_działania_instytucji
     adresy_email_ankietowanych
     definicja_ubóstwa
     stosowane_kryteria_dochodowe
     proporcja_ubogich_wśród_odbiorcow_instytucji
-    dominujace_przyczyny_ubóstwa
+    dominujące_przyczyny_ubóstwa
     dominujące_potrzeby_wynikające_z_ubóstwa
     rodzaje_wsparcia_oferowane_przez_instytucje
     percepcja_powszechności_ubóstwa_w_krakowie_u_instytucji
+    szczególnie_ubogie_dzielnice_krakowa
   ].freeze
 
   def self.subreport_types
@@ -47,6 +48,14 @@ class InstitutionsReport < Report
     add_subreport(
       type: :stosowane_kryteria_dochodowe,
       content: count_unique_answers(unique_answers)
+    )
+  end
+
+  def generate_szczególnie_ubogie_dzielnice_krakowa
+    add_subreport(
+      type: :szczególnie_ubogie_dzielnice_krakowa,
+      content: count_unique_answers(@data.by_col[19]),
+      question: @data.headers[19]
     )
   end
 
@@ -84,10 +93,10 @@ class InstitutionsReport < Report
     )
   end
 
-  def generate_dominujace_przyczyny_ubóstwa
+  def generate_dominujące_przyczyny_ubóstwa
     unique_answers = unique_answers_from_checkbox_rows(@data.by_col[15])
     add_subreport(
-      type: :dominujace_przyczyny_ubóstwa,
+      type: :dominujące_przyczyny_ubóstwa,
       content: count_unique_answers(unique_answers),
       question: @data.headers[15]
     )
@@ -108,10 +117,10 @@ class InstitutionsReport < Report
     )
   end
 
-  def generate_glowne_obszary_dzialania_instytucji
+  def generate_główne_obszary_działania_instytucji
     content = count_unique_answers(@data.by_col[9])
     add_subreport(
-      type: :glowne_obszary_dzialania_instytucji,
+      type: :główne_obszary_działania_instytucji,
       content: content,
       question: @data.headers[9]
     )
@@ -130,12 +139,12 @@ class InstitutionsReport < Report
     content = @data.headers.map.with_index do |header, index|
       "#{index + 1}. #{header}\n"
     end
-ł   add_subreport(ł      type: :lista_pytań,
+    add_subreport(type: :lista_pytań,
       content: content
     )
   end
-ł 
-  def generate_ładane_instytucje
+
+  def generate_badane_instytucje
     questions = @data.headers[1..11]
     institutions = []
     @data.by_row.each do |row|
