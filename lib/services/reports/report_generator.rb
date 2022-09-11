@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'benchmark'
 
 module Reports
   class ReportGenerator
@@ -15,7 +16,10 @@ module Reports
     end
 
     def generate_reports
-      @reports.map(&:generate_report)
+      bm = Benchmark.measure do
+        @reports.map(&:generate_report)
+      end
+      LOGGER.info "Report generation took #{bm.real} seconds"
     end
 
     private

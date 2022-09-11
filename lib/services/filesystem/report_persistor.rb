@@ -2,15 +2,6 @@
 
 require 'fileutils'
 
-module FileCustomMethods
-  def persist_and_log(string)
-    log string
-    puts(string)
-  end
-end
-
-File.class_eval { include FileCustomMethods }
-
 module Filesystem
   class ReportPersistor
     class << self
@@ -26,7 +17,7 @@ module Filesystem
 
       def persist_file(subreport)
         File.open(PROJECT_DIRECTORY + subreport.path, 'w+') do |file|
-          file.persist_and_log(subreport.title)
+          file.puts(subreport.title)
           file.puts(subreport.title.gsub(/./, '~'))
           if subreport.question.present?
             file.puts(subreport.question)
