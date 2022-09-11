@@ -19,6 +19,7 @@ class InstitutionsReport < Report
     szczególnie_ubogie_dzielnice_krakowa
     dzielnice_krakowa_o_wyższym_poziomie_ubóstwa
     grupy_społeczne_o_wyższym_poziomie_ubóstwa
+    znajomość_osób_ubogich_nie_korzystających_z_pomocy
   ].freeze
 
   def self.subreport_types
@@ -64,6 +65,14 @@ class InstitutionsReport < Report
       type: :dzielnice_krakowa_o_wyższym_poziomie_ubóstwa,
       content: count_unique_answers(unique_answers),
       question: @data.headers[20]
+    )
+  end
+
+  def generate_znajomość_osób_ubogich_nie_korzystających_z_pomocy
+    add_subreport(
+      type: :znajomość_osób_ubogich_nie_korzystających_z_pomocy,
+      content: count_unique_answers(@data.by_col[22]),
+      question: @data.headers[22]
     )
   end
 

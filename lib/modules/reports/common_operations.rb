@@ -49,7 +49,7 @@ module Reports
       rows.each do |answer|
         unique_answers << answer.downcase.split(', ')
       end
-=      unique_answers.flatten.uniq
+      unique_answers.flatten.uniq
     end
   end
 end
