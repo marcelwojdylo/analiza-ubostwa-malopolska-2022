@@ -27,11 +27,12 @@ class Report
     raise NotImplementedError
   end
 
-  def add_subreport(type:, content:)
+  def add_subreport(type:, content:, question: '')
     @subreports << Subreport.new(
       report: self,
       type: type,
-      content: content
+      content: content,
+      question: question
     )
   end
 

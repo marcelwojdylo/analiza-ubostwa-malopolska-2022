@@ -52,7 +52,8 @@ class InstitutionsReport < Report
     unique_answers = unique_answers_from_checkbox_rows(@data.by_col[16])
     add_subreport(
       type: :dominujące_potrzeby_wynikające_z_ubóstwa,
-      content: count_unique_answers(unique_answers)
+      content: count_unique_answers(unique_answers),
+      question: @data.headers[16]
     )
   end
 

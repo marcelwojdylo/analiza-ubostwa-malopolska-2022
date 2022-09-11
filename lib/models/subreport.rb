@@ -4,9 +4,9 @@ class Subreport
   class InvalidReport < StandardError; end
   class InvalidContentFormat < StandardError; end
 
-  attr_accessor :report, :type, :content, :title, :path
+  attr_accessor :report, :type, :content, :title, :path, :question
 
-  def initialize(report:, type:, content:)
+  def initialize(report:, type:, content:, question: '')
     raise InvalidReport unless report.is_a? Report
     @report = report
 
@@ -16,6 +16,8 @@ class Subreport
 
     raise InvalidContentFormat unless content_valid?(content)
     @content = content
+
+    @question = question
 
     @title = @type.to_s.tr('_', ' ').capitalize
     @path = "#{report_subdirectory}/#{@type}.txt"
