@@ -13,6 +13,7 @@ class InstitutionsReport < Report
     stosowane_kryteria_dochodowe
     proporcja_ubogich_wsrod_odbiorcow_instytucji
     dominujace_przyczyny_ubostwa
+    dominujące_potrzeby_wynikające_z_ubóstwa
   ].freeze
 
   def self.subreport_types
@@ -47,6 +48,14 @@ class InstitutionsReport < Report
     )
   end
 
+  def generate_dominujące_potrzeby_wynikające_z_ubóstwa
+    unique_answers = unique_answers_from_checkbox_rows(@data.by_col[16])
+    add_subreport(
+      type: :dominujące_potrzeby_wynikające_z_ubóstwa,
+      content: count_unique_answers(unique_answers)
+    )
+  end
+
   def generate_proporcja_ubogich_wsrod_odbiorcow_instytucji
     add_subreport(
       type: :proporcja_ubogich_wsrod_odbiorcow_instytucji,
@@ -55,18 +64,10 @@ class InstitutionsReport < Report
   end
 
   def generate_dominujace_przyczyny_ubostwa
-    rows = @data.by_col[15]
-    rows = rows.map { |a| a.gsub("(alkohol, narkotyki)", "(alkohol lub narkotyki)")}
-    rows = rows.map { |a| a.gsub("rodziny, w których", "rodziny w których")}
-    rows = rows.map { |a| a.gsub(",,", ",")}
-    rows = rows.reject { |a| a == 'brak' }
-    unique_answers = []
-    rows.each do |answer|
-      unique_answers << answer.split(', ')
-    end
+    unique_answers = unique_answers_from_checkbox_rows(@data.by_col[15])
     add_subreport(
       type: :dominujace_przyczyny_ubostwa,
-      content: count_unique_answers(unique_answers.flatten)
+      content: count_unique_answers(unique_answers)
     )
   end
 
