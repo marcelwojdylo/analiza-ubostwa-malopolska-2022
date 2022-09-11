@@ -9,6 +9,7 @@ module Reports
     def clean_up_checkbox_answers(rows)
       rows = rows.map { |a| a.gsub("(alkohol, narkotyki)", "(alkohol lub narkotyki)")}
       rows = rows.map { |a| a.gsub("czynsz, media, podatki", "czynsz media podatki")}
+      rows = rows.map { |a| a.gsub("wakacyjne, feryjne", "wakacyjne feryjne")}
       rows = rows.map { |a| a.gsub("środki higieniczne i odzież", "środki higieniczne, odzież")}
       rows = rows.map { |a| a.gsub(", w któr", " w któr")}
       rows = rows.map { |a| a.gsub(", któr", " któr")}

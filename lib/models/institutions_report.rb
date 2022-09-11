@@ -14,6 +14,7 @@ class InstitutionsReport < Report
     proporcja_ubogich_wsrod_odbiorcow_instytucji
     dominujace_przyczyny_ubostwa
     dominujące_potrzeby_wynikające_z_ubóstwa
+    rodzaje_wsparcia_oferowane_przez_instytucje
   ].freeze
 
   def self.subreport_types
@@ -48,6 +49,15 @@ class InstitutionsReport < Report
     )
   end
 
+  def generate_rodzaje_wsparcia_oferowane_przez_instytucje
+    unique_answers = unique_answers_from_checkbox_rows(@data.by_col[17])
+    add_subreport(
+      type: :rodzaje_wsparcia_oferowane_przez_instytucje,
+      content: count_unique_answers(unique_answers),
+      question: @data.headers[17]
+    )
+  end
+  
   def generate_dominujące_potrzeby_wynikające_z_ubóstwa
     unique_answers = unique_answers_from_checkbox_rows(@data.by_col[16])
     add_subreport(
@@ -60,7 +70,8 @@ class InstitutionsReport < Report
   def generate_proporcja_ubogich_wsrod_odbiorcow_instytucji
     add_subreport(
       type: :proporcja_ubogich_wsrod_odbiorcow_instytucji,
-      content: count_unique_answers(@data.by_col[14])
+      content: count_unique_answers(@data.by_col[14]),
+      question: @data.headers[14]
     )
   end
 
@@ -68,14 +79,16 @@ class InstitutionsReport < Report
     unique_answers = unique_answers_from_checkbox_rows(@data.by_col[15])
     add_subreport(
       type: :dominujace_przyczyny_ubostwa,
-      content: count_unique_answers(unique_answers)
+      content: count_unique_answers(unique_answers),
+      question: @data.headers[15]
     )
   end
 
   def generate_definicja_ubostwa
     add_subreport(
       type: :definicja_ubostwa,
-      content: count_unique_answers(@data.by_col[12])
+      content: count_unique_answers(@data.by_col[12]),
+      question: @data.headers[12]
     )
   end
 
@@ -90,7 +103,8 @@ class InstitutionsReport < Report
     content = count_unique_answers(@data.by_col[9])
     add_subreport(
       type: :glowne_obszary_dzialania_instytucji,
-      content: content
+      content: content,
+      question: @data.headers[9]
     )
   end
 
@@ -98,7 +112,8 @@ class InstitutionsReport < Report
     content = count_unique_answers(@data.by_col[11])
     add_subreport(
       type: :rodzaje_instytucji,
-      content: content
+      content: content,
+      question: @data.headers[11]
     )
   end
 
