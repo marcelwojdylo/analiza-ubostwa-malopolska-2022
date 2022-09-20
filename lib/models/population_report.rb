@@ -7,11 +7,7 @@ class PopulationReport < Report
     :list_of_questions
   ].freeze
 
-  def generate; end
-
-  def type
-    :population_report
-  end
+  def generate_report; end
 
   def parse_input; end
 end

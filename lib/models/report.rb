@@ -12,6 +12,7 @@ class Report
 
   def initialize(input_file_path, generator)
     @input_file_path = input_file_path
+    log "Loading #{input_file_path}"
     @generator = generator
     @report_subdirectory = @generator.setup_report_subdirectory(self)
     @subreports = []
